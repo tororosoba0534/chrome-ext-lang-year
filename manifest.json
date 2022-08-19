@@ -1,0 +1,14 @@
+{
+  "name": "one-year",
+  "description": "Google within 1 year",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "action": {
+    "default_title": "Click to show an alert"
+  }
+}
