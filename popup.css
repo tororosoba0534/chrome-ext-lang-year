@@ -1,9 +1,12 @@
 button {
   height: 30px;
-  width: 30px;
+  width: 50px;
   margin: 10px;
   border: 2px;
   border-radius: 2px;
   border-color: black;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

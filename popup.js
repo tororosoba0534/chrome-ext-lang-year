@@ -25,6 +25,8 @@ const clickBtn = async (isEn, isOne) => {
   const queryOptions = { active: true, lastFocusedWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
 
+  if (!/https?:\/\/www\.google\.com\/search/.test(tab.url)) return;
+
   await chrome.tabs.update(tab.id, {
     url: updateUrl(tab.url, isEn, isOne),
   });
