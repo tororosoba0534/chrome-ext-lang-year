@@ -20,36 +20,14 @@ btnJaWhole.addEventListener("click", async () => {
 });
 
 const clickBtn = async (isEn, isOne) => {
+  await chrome.storage.sync.set({ isEn, isOne });
+
   const queryOptions = { active: true, lastFocusedWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
 
-  //   if (!/https?:\/\/www\.google\.com\/search/.test(tab.url)) return;
-
-  const newUrl = updateUrl(tab.url, isEn, isOne);
-
   await chrome.tabs.update(tab.id, {
-    url: newUrl,
+    url: updateUrl(tab.url, isEn, isOne),
   });
-
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: updateTab,
-    // args: [tab.id, newUrl],
-    args: [tab.id, newUrl],
-  });
-
-  //   chrome.tabs.update(
-  //     tab.id,
-  //     "https://www.tohoho-web.com/ex/chrome_extension.html"
-  //   );
-};
-
-const updateTab = (tabId, url) => {
-  //   alert(/https?:\/\/www\.google\.com\/search/.test(url) ? "Google!!" : "NO...");
-  //   alert(`newUrl: ${url}`);
-  //   chrome.tabs.update(tabId, {
-  //     url: "https://www.tohoho-web.com/ex/chrome_extension.html",
-  //   });
 };
 
 const updateUrl = (url, isEn, isOne) => {
