@@ -11,5 +11,12 @@
   "action": {
     "default_title": "Click to show an alert",
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/search?*"],
+      "css": ["content.css"],
+      "js": ["content.js"]
+    }
+  ]
 }
