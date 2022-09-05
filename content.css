@@ -1,0 +1,6 @@
+#ExtremeSearchRoot {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
