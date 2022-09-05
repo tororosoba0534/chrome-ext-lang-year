@@ -4,48 +4,26 @@ const btnJa1 = document.getElementById("ja-1");
 const btnJaWhole = document.getElementById("ja-whole");
 
 btnEn1.addEventListener("click", async () => {
-  await clickBtn(true, true);
+  await changeStatusIfDiff(true, true);
 });
 
 btnEnWhole.addEventListener("click", async () => {
-  await clickBtn(true, false);
+  await changeStatusIfDiff(true, false);
 });
 
 btnJa1.addEventListener("click", async () => {
-  await clickBtn(false, true);
+  await changeStatusIfDiff(false, true);
 });
 
 btnJaWhole.addEventListener("click", async () => {
-  await clickBtn(false, false);
+  await changeStatusIfDiff(false, false);
 });
 
-const clickBtn = async (isEn, isOne) => {
-  await chrome.storage.sync.set({ isEn, isOne });
+const changeStatusIfDiff = async (isEn, isOne) => {
+  const { isEn: isEnStored, isOne: isOneStored } =
+    await chrome.storage.sync.get(["isEn", "isOne"]);
 
-  const queryOptions = { active: true, lastFocusedWindow: true };
-  const [tab] = await chrome.tabs.query(queryOptions);
-
-  if (!/https?:\/\/www\.google\.com\/search/.test(tab.url)) return;
-
-  await chrome.tabs.update(tab.id, {
-    url: updateUrl(tab.url, isEn, isOne),
-  });
-};
-
-const updateUrl = (url, isEn, isOne) => {
-  let newUrl = url;
-  if (isEn) {
-    newUrl = newUrl + "&lr=-lang_ja";
-  } else {
-    newUrl = newUrl.replace(/&lr=-lang_ja/g, "");
-    newUrl = newUrl.replace(/&hl=en/g, "");
+  if (isEn !== isEnStored || isOne !== isOneStored) {
+    await chrome.storage.sync.set({ isEn, isOne });
   }
-
-  if (isOne) {
-    newUrl = newUrl + "&tbs=qdr:y";
-  } else {
-    newUrl = newUrl.replace(/&as_qdr=y1/g, "");
-    newUrl = newUrl.replace(/&tbs=qdr:y/g, "");
-  }
-  return newUrl;
 };

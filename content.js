@@ -18,6 +18,31 @@ EAll.innerText = "EAll";
 JOne.innerText = "JOne";
 JAll.innerText = "JAll";
 
+EOne.addEventListener("click", async () => {
+  await changeStatusIfDiff(true, true);
+});
+
+EAll.addEventListener("click", async () => {
+  await changeStatusIfDiff(true, false);
+});
+
+JOne.addEventListener("click", async () => {
+  await changeStatusIfDiff(false, true);
+});
+
+JAll.addEventListener("click", async () => {
+  await changeStatusIfDiff(false, false);
+});
+
 contentElm.append(EOne, EAll, JOne, JAll);
 
 rootElm.append(contentElm);
+
+const changeStatusIfDiff = async (isEn, isOne) => {
+  const { isEn: isEnStored, isOne: isOneStored } =
+    await chrome.storage.sync.get(["isEn", "isOne"]);
+
+  if (isEn !== isEnStored || isOne !== isOneStored) {
+    await chrome.storage.sync.set({ isEn, isOne });
+  }
+};

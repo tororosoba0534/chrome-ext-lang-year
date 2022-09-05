@@ -3,6 +3,21 @@ chrome.runtime.onInstalled.addListener(async () => {
   console.log("onInstalled event fired!");
 });
 
+chrome.storage.onChanged.addListener(async (changes, areaName) => {
+  console.log(`changes: ${JSON.stringify(changes)}, areaName: ${areaName}`);
+
+  const { isEn, isOne } = await chrome.storage.sync.get(["isEn", "isOne"]);
+
+  const queryOptions = { active: true, lastFocusedWindow: true };
+  const [tab] = await chrome.tabs.query(queryOptions);
+
+  if (!/https?:\/\/www\.google\.com\/search/.test(tab.url)) return;
+
+  await chrome.tabs.update(tab.id, {
+    url: updateUrl(tab.url, isEn, isOne),
+  });
+});
+
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   //   console.log(`changeInfo: ${JSON.stringify(changeInfo)}`);
 
