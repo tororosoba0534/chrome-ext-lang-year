@@ -7,6 +7,14 @@ chrome.storage.onChanged.addListener(async (changes, areaName) => {
   console.log(`changes: ${JSON.stringify(changes)}, areaName: ${areaName}`);
 
   const { isEn, isOne } = await chrome.storage.sync.get(["isEn", "isOne"]);
+  const iconPath = isEn
+    ? isOne
+      ? "EOne.png"
+      : "EAll.png"
+    : isOne
+    ? "JOne.png"
+    : "JAll.png";
+  await chrome.action.setIcon({ path: iconPath });
 
   const queryOptions = { active: true, lastFocusedWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
@@ -19,13 +27,7 @@ chrome.storage.onChanged.addListener(async (changes, areaName) => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  //   console.log(`changeInfo: ${JSON.stringify(changeInfo)}`);
-
-  //   const queryOptions = { active: true, lastFocusedWindow: true };
-  //   const [tab] = await chrome.tabs.query(queryOptions);
-
   if (changeInfo?.status !== "loading") return;
-  //   console.log(`changeInfo: ${JSON.stringify(changeInfo)}`);
 
   console.log(`tab.url: ${tab.url}`);
   if (!/https?:\/\/www\.google\.com\/search/.test(tab.url)) return;
